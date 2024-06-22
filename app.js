@@ -1,3 +1,5 @@
+
+
 document.addEventListener('DOMContentLoaded', () => {
 
     const cardArray = [
@@ -55,9 +57,26 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const grid = document.querySelector('.grid')
     const resultDisplay = document.querySelector('#result')
+    const timerDisplay = document.querySelector('#timer')
     var cardsChosen = []
     var cardsChosenID = []
     var cardsWon = []
+    let startTime, timerInterval
+
+
+    // Start the timer
+    function startTimer() {
+        startTime = Date.now()
+        timerInterval = setInterval(() => {
+            const elapsedTime = Math.floor((Date.now() - startTime) / 1000)
+            timerDisplay.textContent = elapsedTime
+        }, 1000)
+    }
+
+    // Stop the timer
+    function stopTimer() {
+        clearInterval(timerInterval)
+    }
 
 
     //creating the main board
@@ -69,6 +88,7 @@ document.addEventListener('DOMContentLoaded', () => {
             card.addEventListener('click', flipcard)
             grid.appendChild(card)
         }
+        startTimer() // Start the timer when the board is created
     }
 
     //checking the match
@@ -77,14 +97,14 @@ document.addEventListener('DOMContentLoaded', () => {
         const optionOneId = cardsChosenID[0]
         const optionTwoId = cardsChosenID[1]
         if (cardsChosen[0] === cardsChosen[1]){
-            alert('Yay, You found a MATCH!!!')
+            //alert('Yay, You found a MATCH!!!')
             cards[optionOneId].setAttribute('src', 'images/white.jpg')
             cards[optionTwoId].setAttribute('src', 'images/white.jpg')
             cardsWon.push(cardsChosen)
         }else {
             cards[optionOneId].setAttribute('src', 'images/box.jpg')
             cards[optionTwoId].setAttribute('src', 'images/box.jpg')
-            alert('Sorry, Try again!')
+            //alert('Sorry, Try again!')
         }
 
         cardsChosen = []
@@ -92,6 +112,7 @@ document.addEventListener('DOMContentLoaded', () => {
         resultDisplay.textContent = cardsWon.length
         if(cardsWon.length === cardArray.length/2){
             resultDisplay.textContent = 'Time for a CELEBRATION! You found all the match. Congratulations!!'
+            stopTimer() // Stop the timer when the game is won
         }
 
     }
@@ -107,7 +128,4 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
     createBoard()
-
-
-
 })
