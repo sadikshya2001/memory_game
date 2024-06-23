@@ -1,5 +1,3 @@
-
-
 document.addEventListener('DOMContentLoaded', () => {
 
     const cardArray = [
@@ -58,11 +56,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const grid = document.querySelector('.grid')
     const resultDisplay = document.querySelector('#result')
     const timerDisplay = document.querySelector('#timer')
+    const restartButton = document.querySelector('#restart')
     var cardsChosen = []
     var cardsChosenID = []
     var cardsWon = []
     let startTime, timerInterval
-
 
     // Start the timer
     function startTimer() {
@@ -78,30 +76,30 @@ document.addEventListener('DOMContentLoaded', () => {
         clearInterval(timerInterval)
     }
 
-
     //creating the main board
     function createBoard() {
-        for (let i = 0; i < cardArray.length; i++){
+        grid.innerHTML = '' // Clear the grid
+        cardArray.forEach((_, i) => {
             var card = document.createElement('img')
             card.setAttribute('src', 'images/box.jpg')
             card.setAttribute('data-id', i)
             card.addEventListener('click', flipcard)
             grid.appendChild(card)
-        }
+        })
         startTimer() // Start the timer when the board is created
     }
 
     //checking the match
-    function checkForMatch(){
+    function checkForMatch() {
         var cards = document.querySelectorAll('img')
         const optionOneId = cardsChosenID[0]
         const optionTwoId = cardsChosenID[1]
-        if (cardsChosen[0] === cardsChosen[1]){
+        if (cardsChosen[0] === cardsChosen[1]) {
             //alert('Yay, You found a MATCH!!!')
             cards[optionOneId].setAttribute('src', 'images/white.jpg')
             cards[optionTwoId].setAttribute('src', 'images/white.jpg')
             cardsWon.push(cardsChosen)
-        }else {
+        } else {
             cards[optionOneId].setAttribute('src', 'images/box.jpg')
             cards[optionTwoId].setAttribute('src', 'images/box.jpg')
             //alert('Sorry, Try again!')
@@ -110,22 +108,35 @@ document.addEventListener('DOMContentLoaded', () => {
         cardsChosen = []
         cardsChosenID = []
         resultDisplay.textContent = cardsWon.length
-        if(cardsWon.length === cardArray.length/2){
+        if (cardsWon.length === cardArray.length / 2) {
             resultDisplay.textContent = 'Time for a CELEBRATION! You found all the match. Congratulations!!'
             stopTimer() // Stop the timer when the game is won
         }
-
     }
 
     //flipping the cards
-    function flipcard(){
+    function flipcard() {
         var cardId = this.getAttribute('data-id')
         cardsChosen.push(cardArray[cardId].name)
         cardsChosenID.push(cardId)
         this.setAttribute('src', cardArray[cardId].img)
-        if (cardsChosen.length === 2){
+        if (cardsChosen.length === 2) {
             setTimeout(checkForMatch, 500)
         }
     }
+
+    // Restart the game
+    restartButton.addEventListener('click', () => {
+        cardsChosen = []
+        cardsChosenID = []
+        cardsWon = []
+        resultDisplay.textContent = '0'
+        timerDisplay.textContent = '0'
+        stopTimer()
+        cardArray.sort(() => 0.5 - Math.random()) // Reshuffle cards
+        createBoard() // Recreate the board
+    })
+
     createBoard()
+
 })

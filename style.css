@@ -40,3 +40,18 @@ h3 {
 #time {
     margin-top: 20px; /* Margin to separate the grid and the timer */
 }
+
+#restart {
+    margin-top: 20px;
+    padding: 10px 20px;
+    font-size: 1em;
+    cursor: pointer;
+    background-color: #4CAF50; /* Optional background color */
+    color: white; /* Optional text color */
+    border: none;
+    border-radius: 5px;
+}
+
+#restart:hover {
+    background-color: #45a049; /* Optional hover color */
+}
